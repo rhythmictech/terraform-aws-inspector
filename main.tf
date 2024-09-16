@@ -3,11 +3,11 @@ data "aws_organizations_organization" "this" {}
 data "aws_caller_identity" "this" {}
 
 locals {
-  account_ids = [
+  account_ids = var.enable_inspector_for_all_accounts ? [
     for account in data.aws_organizations_organization.this.accounts :
     account.id
     if account.id != data.aws_caller_identity.this.account_id
-  ]
+  ] : var.accounts_to_associate_with_inspector
 }
 resource "aws_inspector2_enabler" "this" {
   count = var.enable_inspector ? 1 : 0
@@ -16,12 +16,6 @@ resource "aws_inspector2_enabler" "this" {
   resource_types = var.resource_types
 }
 
-resource "aws_inspector2_enabler" "enable_for_all_accounts" {
-  count = var.enable_inspector_for_all_accounts ? 1 : 0
-
-  account_ids    = local.account_ids
-  resource_types = var.resource_types
-}
 resource "aws_inspector2_organization_configuration" "this" {
   count = var.is_delegated_admin ? 1 : 0
 
@@ -38,8 +32,15 @@ resource "aws_inspector2_delegated_admin_account" "this" {
   account_id = var.delegated_admin_account_id
 }
 
+resource "aws_inspector2_enabler" "enable_for_all_accounts" {
+  for_each = length(local.account_ids) > 0 ? toset(local.account_ids) : toset([])
+
+  account_ids    = local.account_ids
+  resource_types = var.resource_types
+}
+
 resource "aws_inspector2_member_association" "this" {
-  for_each   = length(var.accounts_to_associate_with_inspector) > 0 ? toset(var.accounts_to_associate_with_inspector) : toset([])
+  for_each   = length(local.account_ids) > 0 ? toset(local.account_ids) : toset([])
   account_id = each.value
 }
 
