@@ -1,9 +1,3 @@
-variable "account_ids" {
-  default     = []
-  description = "List of AWS account IDs to enable Inspector for (the current account is used if not specified)"
-  type        = list(string)
-}
-
 variable "auto_enable_ec2" {
   default     = false
   description = "Auto-enable EC2 scanning"
@@ -34,6 +28,17 @@ variable "create_notification_topic" {
   type        = bool
 }
 
+variable "enable_inspector" {
+  default     = true
+  description = "Whether to enable Inspector for the current account"
+  type        = bool
+}
+
+variable "enable_inspector_for_all_accounts" {
+  default     = false
+  description = "Whether to enable Inspector for all accounts in the organization (see README for more details)"
+  type        = bool
+}
 variable "inspector_name" {
   default     = "inspector"
   description = "Name prefix for Inspector-related resources"
@@ -70,8 +75,8 @@ variable "delegated_admin_account_id" {
   type        = string
 }
 
-variable "auto_associate_org_members" {
-  default     = false
-  description = "Automatically associate all member accounts in the organization with Inspector"
-  type        = bool
+variable "accounts_to_associate_with_inspector" {
+  default     = []
+  description = "List of AWS account IDs to associate with Inspector (used for more granular control over which accounts are associated with Inspector; see README for more details)"
+  type        = list(string)
 }

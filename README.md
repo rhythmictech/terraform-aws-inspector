@@ -38,14 +38,13 @@ When deploying from the management account of an AWS Organization:
 ```hcl
 module "inspector" {
   source                     = "rhythmictech/inspector/aws"
-  account_ids                = ["123456789012", "210987654321"]
+  
   delegated_admin_account_id = "123456789012"
-  auto_associate_org_members = false
-  is_delegated_admin         = false
+  enable_inspector           = false
 }
 ```
 
-This setup designates a delegated administrator account, enables Inspector for specified accounts, and automatically associates all member accounts with Inspector.
+This setup designates a delegated administrator account, allowing the delegated admin account to manage Inspector settings for the organization.
 
 ### 3. Delegated Administrator Account
 
@@ -131,6 +130,7 @@ No modules.
 | [aws_cloudwatch_event_rule.inspector_findings](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_rule) | resource |
 | [aws_cloudwatch_event_target.send_to_sns](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target) | resource |
 | [aws_inspector2_delegated_admin_account.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/inspector2_delegated_admin_account) | resource |
+| [aws_inspector2_enabler.enable_for_all_accounts](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/inspector2_enabler) | resource |
 | [aws_inspector2_enabler.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/inspector2_enabler) | resource |
 | [aws_inspector2_member_association.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/inspector2_member_association) | resource |
 | [aws_inspector2_organization_configuration.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/inspector2_organization_configuration) | resource |
@@ -142,14 +142,15 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_account_ids"></a> [account\_ids](#input\_account\_ids) | List of AWS account IDs to enable Inspector for (the current account is used if not specified) | `list(string)` | `[]` | no |
-| <a name="input_auto_associate_org_members"></a> [auto\_associate\_org\_members](#input\_auto\_associate\_org\_members) | Automatically associate all member accounts in the organization with Inspector | `bool` | `false` | no |
+| <a name="input_accounts_to_associate_with_inspector"></a> [accounts\_to\_associate\_with\_inspector](#input\_accounts\_to\_associate\_with\_inspector) | List of AWS account IDs to associate with Inspector (used for more granular control over which accounts are associated with Inspector; see README for more details) | `list(string)` | `[]` | no |
 | <a name="input_auto_enable_ec2"></a> [auto\_enable\_ec2](#input\_auto\_enable\_ec2) | Auto-enable EC2 scanning | `bool` | `false` | no |
 | <a name="input_auto_enable_ecr"></a> [auto\_enable\_ecr](#input\_auto\_enable\_ecr) | Auto-enable ECR scanning | `bool` | `false` | no |
 | <a name="input_auto_enable_lambda"></a> [auto\_enable\_lambda](#input\_auto\_enable\_lambda) | Auto-enable Lambda function scanning | `bool` | `false` | no |
 | <a name="input_auto_enable_lambda_code"></a> [auto\_enable\_lambda\_code](#input\_auto\_enable\_lambda\_code) | Auto-enable Lambda function code scanning (only if auto\_enable\_lambda is true) | `bool` | `false` | no |
 | <a name="input_create_notification_topic"></a> [create\_notification\_topic](#input\_create\_notification\_topic) | Whether to create SNS topic for Inspector findings notifications | `bool` | `true` | no |
 | <a name="input_delegated_admin_account_id"></a> [delegated\_admin\_account\_id](#input\_delegated\_admin\_account\_id) | The AWS account ID to be set as a delegated administrator for Inspector | `string` | `null` | no |
+| <a name="input_enable_inspector"></a> [enable\_inspector](#input\_enable\_inspector) | Whether to enable Inspector for the current account | `bool` | `true` | no |
+| <a name="input_enable_inspector_for_all_accounts"></a> [enable\_inspector\_for\_all\_accounts](#input\_enable\_inspector\_for\_all\_accounts) | Whether to enable Inspector for all accounts in the organization (see README for more details) | `bool` | `false` | no |
 | <a name="input_inspector_name"></a> [inspector\_name](#input\_inspector\_name) | Name prefix for Inspector-related resources | `string` | `"inspector"` | no |
 | <a name="input_is_delegated_admin"></a> [is\_delegated\_admin](#input\_is\_delegated\_admin) | Whether this account is a delegated administrator | `bool` | `false` | no |
 | <a name="input_resource_types"></a> [resource\_types](#input\_resource\_types) | List of resource types to be scanned | `list(string)` | <pre>[<br>  "EC2",<br>  "ECR",<br>  "LAMBDA"<br>]</pre> | no |
