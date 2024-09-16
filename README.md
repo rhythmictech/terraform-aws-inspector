@@ -37,11 +37,11 @@ When deploying from the management account of an AWS Organization:
 
 ```hcl
 module "inspector" {
-  source = "rhythmictech/inspector/aws"
-  account_ids = ["123456789012", "210987654321"]
+  source                     = "rhythmictech/inspector/aws"
+  account_ids                = ["123456789012", "210987654321"]
   delegated_admin_account_id = "123456789012"
-  auto_associate_org_members = true
-  is_delegated_admin = false
+  auto_associate_org_members = false
+  is_delegated_admin         = false
 }
 ```
 
@@ -53,13 +53,13 @@ For deployment in a delegated administrator account:
 
 ```hcl
 module "inspector" {
-  source = "rhythmictech/inspector/aws"
-  is_delegated_admin = true
-  auto_enable_ec2 = true
-  auto_enable_ecr = true
-  auto_enable_lambda = true
+  source                     = "rhythmictech/inspector/aws"
+  is_delegated_admin         = true
+  auto_enable_ec2            = true
+  auto_enable_ecr            = true
+  auto_enable_lambda         = true
   auto_associate_org_members = true
-  create_notification_topic = true
+  create_notification_topic  = true
 }
 ```
 
@@ -91,15 +91,15 @@ This minimal setup enables Inspector for the member account and creates a local 
 
 ```hcl
 module "inspector" {
-  source = "rhythmictech/inspector/aws"
-  account_ids = ["123456789012", "210987654321"]
+  source                     = "rhythmictech/inspector/aws"
+  account_ids                = ["123456789012", "210987654321"]
   delegated_admin_account_id = "123456789012"
   auto_associate_org_members = true
-  is_delegated_admin = true
-  auto_enable_ec2 = true
-  auto_enable_ecr = true
-  auto_enable_lambda = true
-  create_notification_topic = true
+  is_delegated_admin         = true
+  auto_enable_ec2            = true
+  auto_enable_ecr            = true
+  auto_enable_lambda         = true
+  create_notification_topic  = true
 }
 ```
 

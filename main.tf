@@ -26,7 +26,9 @@ data "aws_organizations_organization" "this" {}
 resource "aws_inspector2_member_association" "this" {
   for_each = var.auto_associate_org_members ? {
     for account in data.aws_organizations_organization.this.accounts :
-    account.id => account.id if account.id != data.aws_organizations_organization.this.master_account_id
+    account.id => account.id
+    if account.id != data.aws_organizations_organization.this.master_account_id &&
+    account.id != var.delegated_admin_account_id
   } : {}
 
   account_id = each.value
