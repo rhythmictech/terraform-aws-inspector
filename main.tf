@@ -39,7 +39,7 @@ resource "aws_inspector2_delegated_admin_account" "this" {
 }
 
 resource "aws_inspector2_member_association" "this" {
-  for_each   = var.accounts_to_associate_with_inspector
+  for_each   = length(var.accounts_to_associate_with_inspector) > 0 ? toset(var.accounts_to_associate_with_inspector) : toset([])
   account_id = each.value
 }
 
