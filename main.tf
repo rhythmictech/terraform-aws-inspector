@@ -6,9 +6,11 @@ locals {
   account_ids = var.enable_inspector_for_all_accounts ? [
     for account in data.aws_organizations_organization.this.accounts :
     account.id
-    if account.id != data.aws_caller_identity.this.account_id
+    if account.id != data.aws_caller_identity.this.account_id &&
+    !contains(var.excluded_account_ids, account.id)
   ] : var.accounts_to_associate_with_inspector
 }
+
 resource "aws_inspector2_enabler" "this" {
   count = var.enable_inspector ? 1 : 0
 

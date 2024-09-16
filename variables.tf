@@ -80,3 +80,9 @@ variable "accounts_to_associate_with_inspector" {
   description = "List of AWS account IDs to associate with Inspector (used for more granular control over which accounts are associated with Inspector; see README for more details)"
   type        = list(string)
 }
+
+variable "excluded_account_ids" {
+  description = "List of account IDs to exclude from Inspector enablement when enable_inspector_for_all_accounts is true"
+  type        = list(string)
+  default     = []
+}

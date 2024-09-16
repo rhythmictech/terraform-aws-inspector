@@ -52,13 +52,13 @@ For deployment in a delegated administrator account:
 
 ```hcl
 module "inspector" {
-  source                     = "rhythmictech/inspector/aws"
-  is_delegated_admin         = true
-  auto_enable_ec2            = true
-  auto_enable_ecr            = true
-  auto_enable_lambda         = true
-  auto_associate_org_members = true
-  create_notification_topic  = true
+  source                             = "rhythmictech/inspector/aws"
+  is_delegated_admin                 = true
+  auto_enable_ec2                    = true
+  auto_enable_ecr                    = true
+  auto_enable_lambda                 = true
+  enable_inspector_for_all_accounts  = true
+  create_notification_topic          = true
 }
 ```
 
@@ -90,15 +90,14 @@ This minimal setup enables Inspector for the member account and creates a local 
 
 ```hcl
 module "inspector" {
-  source                     = "rhythmictech/inspector/aws"
-  account_ids                = ["123456789012", "210987654321"]
-  delegated_admin_account_id = "123456789012"
-  auto_associate_org_members = true
-  is_delegated_admin         = true
-  auto_enable_ec2            = true
-  auto_enable_ecr            = true
-  auto_enable_lambda         = true
-  create_notification_topic  = true
+  source                            = "rhythmictech/inspector/aws"
+  is_delegated_admin                = true
+  auto_enable_ec2                   = true
+  auto_enable_ecr                   = true
+  auto_enable_lambda                = true
+  create_notification_topic         = true
+  enable_inspector_for_all_accounts = true
+  exclude_account_ids               = ["123456789012", "210987654321"]
 }
 ```
 
@@ -151,6 +150,7 @@ No modules.
 | <a name="input_delegated_admin_account_id"></a> [delegated\_admin\_account\_id](#input\_delegated\_admin\_account\_id) | The AWS account ID to be set as a delegated administrator for Inspector | `string` | `null` | no |
 | <a name="input_enable_inspector"></a> [enable\_inspector](#input\_enable\_inspector) | Whether to enable Inspector for the current account | `bool` | `true` | no |
 | <a name="input_enable_inspector_for_all_accounts"></a> [enable\_inspector\_for\_all\_accounts](#input\_enable\_inspector\_for\_all\_accounts) | Whether to enable Inspector for all accounts in the organization (see README for more details) | `bool` | `false` | no |
+| <a name="input_excluded_account_ids"></a> [excluded\_account\_ids](#input\_excluded\_account\_ids) | List of account IDs to exclude from Inspector enablement when enable\_inspector\_for\_all\_accounts is true | `list(string)` | `[]` | no |
 | <a name="input_inspector_name"></a> [inspector\_name](#input\_inspector\_name) | Name prefix for Inspector-related resources | `string` | `"inspector"` | no |
 | <a name="input_is_delegated_admin"></a> [is\_delegated\_admin](#input\_is\_delegated\_admin) | Whether this account is a delegated administrator | `bool` | `false` | no |
 | <a name="input_resource_types"></a> [resource\_types](#input\_resource\_types) | List of resource types to be scanned | `list(string)` | <pre>[<br>  "EC2",<br>  "ECR",<br>  "LAMBDA"<br>]</pre> | no |
