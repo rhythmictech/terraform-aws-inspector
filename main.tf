@@ -44,6 +44,8 @@ resource "aws_inspector2_enabler" "enable_for_all_accounts" {
 resource "aws_inspector2_member_association" "this" {
   for_each   = length(local.account_ids) > 0 ? toset(local.account_ids) : toset([])
   account_id = each.value
+
+  depends_on = [aws_inspector2_enabler.enable_for_all_accounts]
 }
 
 resource "aws_cloudwatch_event_rule" "inspector_findings" {
