@@ -70,7 +70,7 @@ For individual member accounts (if needed):
 
 ```hcl
 module "inspector" {
-  source = "rhythmictech/inspector/aws"
+  source                    = "rhythmictech/inspector/aws"
   create_notification_topic = true
 }
 ```
