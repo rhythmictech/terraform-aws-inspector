@@ -37,8 +37,8 @@ When deploying from the management account of an AWS Organization:
 
 ```hcl
 module "inspector" {
-  source                     = "rhythmictech/inspector/aws"
-  
+  source = "rhythmictech/inspector/aws"
+
   delegated_admin_account_id = "123456789012"
   enable_inspector           = false
 }
