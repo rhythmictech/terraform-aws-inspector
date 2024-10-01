@@ -21,11 +21,11 @@ For a simple setup in a single AWS account:
 
 ```hcl
 module "inspector" {
-  source = "rhythmictech/inspector/aws"
+  source                    = "rhythmictech/inspector/aws"
   create_notification_topic = true
-  auto_enable_ec2 = true
-  auto_enable_ecr = true
-  auto_enable_lambda = true
+  auto_enable_ec2           = true
+  auto_enable_ecr           = true
+  auto_enable_lambda        = true
 }
 ```
 
