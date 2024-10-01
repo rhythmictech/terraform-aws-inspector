@@ -1,13 +1,54 @@
----
+exclude: ".terraform"
 repos:
-- repo: git://github.com/antonbabenko/pre-commit-terraform
-  rev: v1.19.0
-  hooks:
-    - id: terraform_fmt
-    - id: terraform_docs
-- repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v2.3.0
-  hooks:
-    - id: end-of-file-fixer
-    - id: trailing-whitespace
-    - id: no-commit-to-branch
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.92.2
+    hooks:
+      - id: terraform_docs
+        always_run: true
+      - id: terraform_fmt
+      - id: terraform_validate
+        args:
+        - --hook-config=--retry-once-with-cleanup=true
+        exclude: ^examples
+      - id: terraform_tflint
+        alias: terraform_tflint_nocreds
+        exclude: ^examples
+        name: terraform_tflint_nocreds
+      - id: terraform_trivy
+        args:
+        - --args=--skip-dirs="**/.terraform,examples/*"
+      - id: terraform_providers_lock
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: check-added-large-files
+      - id: check-case-conflict
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-symlinks
+      - id: check-yaml
+        args:
+          - --unsafe
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+        args:
+          - --fix=lf
+      - id: no-commit-to-branch
+        args:
+          - --branch
+          - main
+          - --branch
+          - master
+          - --branch
+          - prod
+      - id: pretty-format-json
+        args:
+          - --autofix
+          - --top-keys=name,Name
+      - id: trailing-whitespace
+        args:
+          - --markdown-linebreak-ext=md
+        exclude: README.md
+ci:
+  skip: [terraform_docs, terraform_fmt, terraform_validate, terraform_tflint, terraform_trivy, terraform_providers_lock]
